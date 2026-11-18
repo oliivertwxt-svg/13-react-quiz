@@ -95,6 +95,11 @@
   font-weight: 600;
 }
 
+.bestScore {
+  color: #9a96aa;
+  font-size: 10px;
+}
+
 .playButton {
   display: inline-flex;
   min-height: 46px;

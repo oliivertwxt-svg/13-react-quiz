@@ -3,14 +3,25 @@ import ScoreBoard from './ScoreBoard.jsx'
 import Timer from './Timer.jsx'
 import styles from './Question.module.css'
 
-function Question({ question, currentQuestion, totalQuestions, onFinish }) {
+function Question({
+  question,
+  currentQuestion,
+  totalQuestions,
+  progress,
+  score,
+  maxPoints,
+  answer: answerState,
+  secondsRemaining,
+  onAnswer,
+  onNext,
+}) {
   return (
     <section className={styles.card} aria-labelledby="question-title">
       <div className={styles.topline}>
         <span className={styles.category}>{question.category}</span>
         <div className={styles.stats}>
-          <ScoreBoard score={0} total={totalQuestions} />
-          <Timer seconds={30} />
+          <ScoreBoard score={score} total={maxPoints} />
+          <Timer seconds={secondsRemaining} />
         </div>
       </div>
 
@@ -18,7 +29,11 @@ function Question({ question, currentQuestion, totalQuestions, onFinish }) {
         <span>Question {String(currentQuestion).padStart(2, '0')}</span>
         <span>{String(totalQuestions).padStart(2, '0')}</span>
       </div>
-      <ProgressBar current={currentQuestion} total={totalQuestions} />
+      <ProgressBar
+        current={currentQuestion}
+        total={totalQuestions}
+        progress={progress}
+      />
 
       <div className={styles.questionBody}>
         <p className={styles.eyebrow}>
@@ -28,30 +43,57 @@ function Question({ question, currentQuestion, totalQuestions, onFinish }) {
         <p className={styles.instruction}>Choose one answer</p>
 
         <div className={styles.answers} role="radiogroup" aria-label="Answer choices">
-          {question.answers.map((answer, index) => (
-            <label className={styles.answer} key={answer}>
-              <input
-                type="radio"
-                name="answer"
-                value={answer}
-                aria-label={`${String.fromCharCode(65 + index)}. ${answer}`}
-              />
-              <span className={styles.answerContent}>
-                <span className={styles.letter}>{String.fromCharCode(65 + index)}</span>
-                <span>{answer}</span>
-              </span>
-            </label>
-          ))}
+          {question.answers.map((option, index) => {
+            const isSelected = answerState?.selected === option
+            const isCorrect = option === question.correctAnswer
+            const isIncorrectSelection = isSelected && !answerState.isCorrect
+            const answerClassName = [
+              styles.answerContent,
+              answerState && isCorrect && styles.correct,
+              isIncorrectSelection && styles.incorrect,
+            ].filter(Boolean).join(' ')
+
+            return (
+              <label
+                className={`${styles.answer} ${answerState ? styles.answerLocked : ''}`}
+                key={option}
+              >
+                <input
+                  type="radio"
+                  name="answer"
+                  value={option}
+                  checked={isSelected}
+                  aria-label={`${String.fromCharCode(65 + index)}. ${option}`}
+                  disabled={Boolean(answerState)}
+                  onChange={() => onAnswer(option)}
+                />
+                <span className={answerClassName}>
+                  <span className={styles.letter}>{String.fromCharCode(65 + index)}</span>
+                  <span>{option}</span>
+                  {answerState && isCorrect && (
+                    <span className={styles.answerFeedback}>Correct</span>
+                  )}
+                  {isIncorrectSelection && (
+                    <span className={styles.answerFeedback}>Not quite</span>
+                  )}
+                </span>
+              </label>
+            )
+          })}
         </div>
       </div>
 
       <div className={styles.bottomline}>
         <span className={styles.encouragement}>
-          <span aria-hidden="true">✦</span> You&apos;ve got this!
+          <span aria-hidden="true">✦</span>{' '}
+          {answerState ? 'Answer locked in!' : 'You’ve got this!'}
         </span>
-        <button className={styles.nextButton} type="button" onClick={onFinish}>
-          Finish quiz <span aria-hidden="true">→</span>
-        </button>
+        {answerState && (
+          <button className={styles.nextButton} type="button" onClick={onNext}>
+            {currentQuestion === totalQuestions ? 'See results' : 'Next'}
+            <span aria-hidden="true">→</span>
+          </button>
+        )}
       </div>
     </section>
   )

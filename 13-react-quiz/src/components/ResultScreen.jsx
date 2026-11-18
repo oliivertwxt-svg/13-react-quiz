@@ -1,6 +1,6 @@
 import styles from './ResultScreen.module.css'
 
-function ResultScreen({ score, total, onPlayAgain }) {
+function ResultScreen({ score, total, highscore, onPlayAgain }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0
 
   return (
@@ -17,6 +17,7 @@ function ResultScreen({ score, total, onPlayAgain }) {
         <span className={styles.scoreLabel}>YOUR SCORE</span>
         <strong>{score}<span> / {total}</span></strong>
         <span className={styles.percentage}>{percentage}% curious</span>
+        <span className={styles.bestScore}>Personal best: {highscore}</span>
       </div>
 
       <button className={styles.playButton} type="button" onClick={onPlayAgain}>

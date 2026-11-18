@@ -1,8 +1,6 @@
 import styles from './ProgressBar.module.css'
 
-function ProgressBar({ current, total }) {
-  const progress = total > 0 ? (current / total) * 100 : 0
-
+function ProgressBar({ current, total, progress }) {
   return (
     <div
       className={styles.track}

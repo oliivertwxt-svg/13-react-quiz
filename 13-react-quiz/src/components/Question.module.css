@@ -85,6 +85,10 @@
   cursor: pointer;
 }
 
+.answerLocked {
+  cursor: default;
+}
+
 .answer input {
   position: absolute;
   width: 1px;
@@ -135,6 +139,34 @@
 .answer input:checked + .answerContent .letter {
   color: #fff;
   background: var(--purple);
+}
+
+.correct {
+  border-color: #75cba0;
+  color: #286d4b;
+  background: #eaf8f0;
+}
+
+.correct .letter {
+  color: #fff;
+  background: #45a875;
+}
+
+.incorrect {
+  border-color: #ee8b99;
+  color: #a53d4b;
+  background: #fff0f2;
+}
+
+.incorrect .letter {
+  color: #fff;
+  background: #d86a78;
+}
+
+.answerFeedback {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
 }
 
 .bottomline {
