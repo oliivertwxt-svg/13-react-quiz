@@ -1,13 +1,12 @@
 import styles from './StartScreen.module.css'
 
-function StartScreen({ ready, questionCount, highscore, onStart }) {
+function StartScreen({ ready, questionCount, highscore, categories, onStart }) {
   function handleSubmit(event) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     onStart({
-      category: formData.get('category'),
+      categoryId: Number(formData.get('category')),
       difficulty: formData.get('difficulty'),
-      questionCount: formData.get('questionCount'),
     })
   }
 
@@ -50,34 +49,32 @@ function StartScreen({ ready, questionCount, highscore, onStart }) {
           <form className={styles.form} onSubmit={handleSubmit}>
             <label className={styles.field}>
               <span className={styles.label}>I&apos;m in the mood for</span>
-              <select name="category" defaultValue="Mixed bag">
-                <option>Mixed bag</option>
-                <option>Nature</option>
-                <option>Science</option>
-                <option>Pop culture</option>
-                <option>Geography</option>
-                <option>Food</option>
+              <select
+                name="category"
+                defaultValue={String(categories[0]?.id ?? '')}
+                required
+              >
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </label>
 
             <div className={styles.fieldRow}>
               <label className={styles.field}>
                 <span className={styles.label}>Make it</span>
-                <select name="difficulty" defaultValue="Any difficulty">
-                  <option>Any difficulty</option>
-                  <option>Easy</option>
-                  <option>Medium</option>
-                  <option>Hard</option>
+                <select name="difficulty" defaultValue="easy">
+                  <option value="easy">Easy peasy</option>
+                  <option value="medium">Getting curious</option>
+                  <option value="hard">Brain bender</option>
                 </select>
               </label>
-              <label className={styles.field}>
+              <div className={styles.field}>
                 <span className={styles.label}>A quick</span>
-                <select name="questionCount" defaultValue="5">
-                  <option value="5">5 questions</option>
-                  <option value="10">10 questions</option>
-                  <option value="15">15 questions</option>
-                </select>
-              </label>
+                <span className={styles.questionCount}>10 questions</span>
+              </div>
             </div>
 
             <button className={styles.startButton} type="submit">

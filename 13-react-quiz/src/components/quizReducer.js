@@ -4,7 +4,7 @@ export const initialQuizState = {
   index: 0,
   answer: null,
   points: 0,
-  secondsRemaining: 30,
+  secondsRemaining: 15,
   highscore: 0,
 }
 
@@ -20,18 +20,14 @@ export function quizReducer(state, action) {
   switch (action.type) {
     case 'start':
       if (state.status === 'ready') {
-        return { ...state, status: 'active', secondsRemaining: 30 }
+        return { ...state, status: 'active', secondsRemaining: 15 }
       }
 
       if (!['idle', 'error', 'finished'].includes(state.status)) return state
-      if (!Array.isArray(action.payload?.questions)) {
-        throw new Error('Starting a quiz requires a questions array.')
-      }
 
       return {
         ...initialQuizState,
         status: 'loading',
-        questions: action.payload.questions,
         highscore: state.highscore,
       }
 
@@ -66,7 +62,7 @@ export function quizReducer(state, action) {
         ...state,
         index: state.index + 1,
         answer: null,
-        secondsRemaining: 30,
+        secondsRemaining: 15,
       }
 
     case 'finish':

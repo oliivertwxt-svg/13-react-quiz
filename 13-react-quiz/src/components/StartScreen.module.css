@@ -131,6 +131,19 @@
   font-weight: 600;
 }
 
+.questionCount {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--ink);
+  background: #f8f7fb;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .startButton {
   display: flex;
   align-items: center;
