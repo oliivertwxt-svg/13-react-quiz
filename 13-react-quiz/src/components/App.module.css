@@ -1,0 +1,81 @@
+.page {
+  width: min(100% - 48px, 1120px);
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 27px 2px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+  text-decoration: none;
+}
+
+.brandIcon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--purple);
+  font-size: 22px;
+}
+
+.headerNote {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 0 54px;
+}
+
+.footer {
+  padding: 22px 0 28px;
+  color: #9795a8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.footer span {
+  color: #f2ad54;
+}
+
+@media (max-width: 560px) {
+  .page {
+    width: min(100% - 32px, 1120px);
+  }
+
+  .header {
+    padding: 20px 0;
+  }
+
+  .headerNote {
+    max-width: 105px;
+    text-align: right;
+  }
+
+  .content {
+    padding: 18px 0 38px;
+  }
+}

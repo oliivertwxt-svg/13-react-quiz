@@ -1,0 +1,18 @@
+.timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 1px solid #f6e1bb;
+  border-radius: 9px;
+  color: #9c6a22;
+  background: #fff8eb;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.icon {
+  font-size: 16px;
+  line-height: 1;
+}

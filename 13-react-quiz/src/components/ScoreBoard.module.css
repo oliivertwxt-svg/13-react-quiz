@@ -1,0 +1,35 @@
+.score {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 7px;
+  align-items: center;
+  padding: 7px 11px;
+  border: 1px solid #e8e2ff;
+  border-radius: 10px;
+  background: #f7f5ff;
+}
+
+.star {
+  grid-row: span 2;
+  color: #f3b843;
+  font-size: 19px;
+}
+
+.label {
+  color: #8a86a0;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  line-height: 1;
+}
+
+.score strong {
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+.score strong span {
+  color: #8a86a0;
+  font-weight: 500;
+}
