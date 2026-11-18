@@ -1,16 +1,43 @@
-# React + Vite
+# Little Quiz Club
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A playful, accessible trivia quiz built with React 19 and Vite. Choose a category and difficulty, answer ten questions, and try to beat your saved high score.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Questions and categories from the [Open Trivia DB](https://opentdb.com/)
+- Category and difficulty selection, with settings remembered in local storage
+- Correct/incorrect answer feedback and score tracking
+- Fifteen-second countdown for each question
+- High score saved in local storage
+- Keyboard support: press **1–4** to choose an answer and **Enter** to continue
+- Accessible answer buttons, pressed state, and screen-reader announcements
+- Responsive layout, loading states, and retryable error screens
 
-## React Compiler
+## Screenshot
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Replace this placeholder with a screenshot of the quiz:
 
-## Expanding the ESLint configuration
+![Little Quiz Club screenshot placeholder](./screenshots/quiz-screen.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Run locally
+
+```sh
+npm install
+npm run dev
+```
+
+Create and preview a production build:
+
+```sh
+npm run build
+npm run preview
+```
+
+Vite writes the production-ready static site to `dist/`. It contains the built HTML entry point and optimized JavaScript, CSS, and other assets; it can be served by a static hosting provider such as Vercel.
+
+## What I learned about hooks
+
+- **`useReducer`** is useful when related state changes through explicit transitions, such as loading questions, answering, scoring, and finishing a quiz.
+- **`useEffect`** synchronizes with external systems. Its dependency array determines when the effect re-runs; cleanup aborts fetches and clears timers/listeners so stale work does not continue.
+- **`useLocalStorageState`** is a custom hook that reuses persistence behavior for the high score and last-used quiz settings.
+- **Derived values** such as progress and maximum points stay out of state, avoiding duplicate values that could become inconsistent.

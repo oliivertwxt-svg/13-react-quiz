@@ -40,48 +40,51 @@ function Question({
           {question.difficulty} <span aria-hidden="true">·</span> TRUST YOUR GUT
         </p>
         <h1 id="question-title">{question.prompt}</h1>
-        <p className={styles.instruction}>Choose one answer</p>
+        <p className={styles.instruction}>
+          {answerState ? 'Press Enter or choose Next to continue' : 'Choose one answer · Press 1–4'}
+        </p>
 
-        <div className={styles.answers} role="radiogroup" aria-label="Answer choices">
+        <div className={styles.answers} role="group" aria-label="Answer choices">
           {question.answers.map((option, index) => {
             const isSelected = answerState?.selected === option
             const isCorrect = option === question.correctAnswer
             const isIncorrectSelection = isSelected && !answerState.isCorrect
             const answerClassName = [
-              styles.answerContent,
               answerState && isCorrect && styles.correct,
               isIncorrectSelection && styles.incorrect,
             ].filter(Boolean).join(' ')
 
             return (
-              <label
-                className={`${styles.answer} ${answerState ? styles.answerLocked : ''}`}
+              <button
+                className={`${styles.answer} ${answerClassName}`}
                 key={option}
+                type="button"
+                aria-pressed={isSelected}
+                aria-keyshortcuts={String(index + 1)}
+                disabled={Boolean(answerState)}
+                onClick={() => onAnswer(option)}
               >
-                <input
-                  type="radio"
-                  name="answer"
-                  value={option}
-                  checked={isSelected}
-                  aria-label={`${String.fromCharCode(65 + index)}. ${option}`}
-                  disabled={Boolean(answerState)}
-                  onChange={() => onAnswer(option)}
-                />
-                <span className={answerClassName}>
-                  <span className={styles.letter}>{String.fromCharCode(65 + index)}</span>
-                  <span>{option}</span>
-                  {answerState && isCorrect && (
-                    <span className={styles.answerFeedback}>Correct</span>
-                  )}
-                  {isIncorrectSelection && (
-                    <span className={styles.answerFeedback}>Not quite</span>
-                  )}
-                </span>
-              </label>
+                <span className={styles.letter}>{String.fromCharCode(65 + index)}</span>
+                <span>{option}</span>
+                {answerState && isCorrect && (
+                  <span className={styles.answerFeedback}>Correct</span>
+                )}
+                {isIncorrectSelection && (
+                  <span className={styles.answerFeedback}>Not quite</span>
+                )}
+              </button>
             )
           })}
         </div>
       </div>
+
+      <p className={styles.screenReaderOnly} role="status" aria-live="polite" aria-atomic="true">
+        {answerState
+          ? answerState.isCorrect
+            ? 'Correct!'
+            : `Incorrect. The correct answer is ${question.correctAnswer}.`
+          : ''}
+      </p>
 
       <div className={styles.bottomline}>
         <span className={styles.encouragement}>

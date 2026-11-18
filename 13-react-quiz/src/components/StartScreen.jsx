@@ -1,6 +1,13 @@
 import styles from './StartScreen.module.css'
 
-function StartScreen({ ready, questionCount, highscore, categories, onStart }) {
+function StartScreen({
+  ready,
+  questionCount,
+  highscore,
+  categories,
+  initialSettings,
+  onStart,
+}) {
   function handleSubmit(event) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
@@ -51,7 +58,7 @@ function StartScreen({ ready, questionCount, highscore, categories, onStart }) {
               <span className={styles.label}>I&apos;m in the mood for</span>
               <select
                 name="category"
-                defaultValue={String(categories[0]?.id ?? '')}
+                defaultValue={String(initialSettings.categoryId ?? categories[0]?.id ?? '')}
                 required
               >
                 {categories.map((category) => (
@@ -65,7 +72,7 @@ function StartScreen({ ready, questionCount, highscore, categories, onStart }) {
             <div className={styles.fieldRow}>
               <label className={styles.field}>
                 <span className={styles.label}>Make it</span>
-                <select name="difficulty" defaultValue="easy">
+                <select name="difficulty" defaultValue={initialSettings.difficulty}>
                   <option value="easy">Easy peasy</option>
                   <option value="medium">Getting curious</option>
                   <option value="hard">Brain bender</option>

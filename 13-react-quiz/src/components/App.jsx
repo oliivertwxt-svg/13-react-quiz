@@ -6,10 +6,20 @@ import StartScreen from './StartScreen.jsx'
 import Question from './Question.jsx'
 import { fetchCategories, fetchQuestions } from './triviaApi.js'
 import { initialQuizState, quizReducer } from './quizReducer.js'
+import useLocalStorageState from './useLocalStorageState.js'
 import styles from './App.module.css'
 
 function App() {
-  const [state, dispatch] = useReducer(quizReducer, initialQuizState)
+  const [highscore, setHighscore] = useLocalStorageState('little-quiz-highscore', 0)
+  const [lastSettings, setLastSettings] = useLocalStorageState(
+    'little-quiz-last-settings',
+    { categoryId: null, difficulty: 'easy' },
+  )
+  const [state, dispatch] = useReducer(
+    quizReducer,
+    highscore,
+    (storedHighscore) => ({ ...initialQuizState, highscore: storedHighscore }),
+  )
   const [categoryState, setCategoryState] = useState({
     status: 'loading',
     categories: [],
@@ -23,6 +33,7 @@ function App() {
   const progress = totalQuestions > 0
     ? ((state.index + 1) / totalQuestions) * 100
     : 0
+  const question = state.questions[state.index]
 
   useEffect(() => {
     const controller = new AbortController()
@@ -78,8 +89,46 @@ function App() {
     return () => window.clearInterval(intervalId)
   }, [state.status, state.answer])
 
+  useEffect(() => {
+    if (state.status === 'finished' && state.highscore > highscore) {
+      setHighscore(state.highscore)
+    }
+  }, [state.status, state.highscore, highscore, setHighscore])
+
+  useEffect(() => {
+    if (state.status !== 'active') return undefined
+
+    function handleKeyDown(event) {
+      const target = event.target
+      if (
+        target.isContentEditable
+        || ['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName)
+        || event.altKey
+        || event.ctrlKey
+        || event.metaKey
+      ) {
+        return
+      }
+
+      if (event.key >= '1' && event.key <= '4' && !state.answer) {
+        const answer = question?.answers[Number(event.key) - 1]
+        if (answer) {
+          event.preventDefault()
+          dispatch({ type: 'newAnswer', payload: answer })
+        }
+      } else if (event.key === 'Enter' && state.answer) {
+        event.preventDefault()
+        dispatch({ type: 'nextQuestion' })
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [state.status, state.answer, question])
+
   function handleStart(settings) {
     requestSettings.current = settings
+    setLastSettings(settings)
     setQuizError(null)
     dispatch({ type: 'start' })
   }
@@ -93,8 +142,6 @@ function App() {
     setCategoryState({ status: 'loading', categories: [], error: null })
     setCategoryAttempt((attempt) => attempt + 1)
   }
-
-  const question = state.questions[state.index]
 
   return (
     <main className={styles.page}>
@@ -132,6 +179,7 @@ function App() {
             questionCount={totalQuestions}
             highscore={state.highscore}
             categories={categoryState.categories}
+            initialSettings={lastSettings}
             onStart={(settings) => {
               if (settings) {
                 handleStart(settings)
